@@ -852,15 +852,15 @@
 
   <!-- 客服与帮助：打字机助手模块（整段粘贴到 Crisp 配置注释之前） -->
 <style>
-  .ca{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",Roboto,sans-serif;letter-spacing:.02em;background:var(--bg-card,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:14px;box-shadow:var(--shadow-sm,0 1px 3px rgba(0,0,0,.05));overflow:hidden;font-size:15px;line-height:1.85;margin:8px 0 96px;color:var(--text-main,#0f172a)}
+  .ca{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",Roboto,sans-serif;letter-spacing:.02em;background:var(--bg-card,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:14px;box-shadow:var(--shadow-sm,0 1px 3px rgba(0,0,0,.05));overflow:hidden;font-size:16.5px;line-height:1.9;margin:8px 0 96px;color:var(--text-main,#0f172a)}
   .ca button,.ca a{font:inherit}
-  .ca-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;row-gap:2px;padding:13px 22px;border-bottom:1px solid var(--border-color,#e2e8f0);background:#f8fafc;font-size:14px;font-weight:600}
+  .ca-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;row-gap:2px;padding:16px 28px;border-bottom:1px solid var(--border-color,#e2e8f0);background:#f8fafc;font-size:15px;font-weight:600}
   .ca-dot{width:8px;height:8px;border-radius:50%;background:var(--accent-green,#059669);box-shadow:0 0 0 3px rgba(5,150,105,.14)}
-  .ca-hours{flex:1 1 230px;min-width:0;margin-left:4px;font-size:12px;font-weight:400;line-height:1.5;color:var(--text-muted,#64748b)}
+  .ca-hours{flex:1 1 230px;min-width:0;margin-left:4px;font-size:13px;font-weight:400;line-height:1.5;color:var(--text-muted,#64748b)}
   .ca-state{font-size:13px;font-weight:500;color:var(--text-muted,#64748b)}
   .ca-nav{display:flex}
   .ca-ctl{display:flex;align-items:center;gap:4px}
-  .ca-pn{width:28px;height:28px;padding:0;border:1px solid var(--border-color,#e2e8f0);border-radius:50%;background:#fff;color:var(--text-main,#0f172a);font-size:17px;line-height:1;cursor:pointer;transition:border-color .2s,color .2s}
+  .ca-pn{width:32px;height:32px;padding:0;border:1px solid var(--border-color,#e2e8f0);border-radius:50%;background:#fff;color:var(--text-main,#0f172a);font-size:17px;line-height:1;cursor:pointer;transition:border-color .2s,color .2s}
   .ca-pn:hover{border-color:var(--primary,#2563eb);color:var(--primary,#2563eb)}
   .ca-pn:focus-visible{outline:2px solid var(--primary,#2563eb);outline-offset:1px}
   .ca-dot.off{background:#94a3b8;box-shadow:0 0 0 3px rgba(148,163,184,.2)}
@@ -870,37 +870,42 @@
   .ca-nav button::before{content:"";position:absolute;left:4px;top:8px;width:6px;height:6px;border-radius:50%;background:#cbd5e1;transition:background .2s}
   .ca-nav button[aria-current="true"]::before{background:var(--primary,#2563eb)}
   .ca-nav button:focus-visible{outline:2px solid var(--primary,#2563eb);outline-offset:1px;border-radius:4px}
-  .ca-stage{position:relative;display:grid;padding:24px 26px 12px}
+  .ca-stage{position:relative;display:grid;padding:32px 34px 16px;min-height:360px}
   .ca-live,.ca-ghost{grid-area:1/1}
-  .ca-ghost{visibility:hidden;pointer-events:none}
-  .ca-ghost>div{display:none}
-  .ca-ghost>div.on{display:block}
+  .ca-ghost{display:grid;visibility:hidden;pointer-events:none}
+  .ca-ghost>div{grid-area:1/1}
   .ca-live{transition:opacity .35s ease,transform .35s ease}
   .ca-live.out{opacity:0;transform:translateY(-4px)}
   .ca-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
   .ca-l{white-space:pre-wrap;margin-bottom:8px}
-  .ca-h{font-size:17px;font-weight:700}
+  .ca-h{font-size:19px;font-weight:700}
   .ca-m{font-weight:600;color:var(--primary,#2563eb)}
-  .ca-g,.ca-c{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;color:var(--text-muted,#64748b)}
+  .ca-g,.ca-c{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;color:var(--text-muted,#64748b)}
   .ca-c{display:inline-block;margin:0 16px 4px 0}
   .ca-l.ca-g{margin:10px 0 4px}
   .ca-live.pop{animation:caIn .3s ease}
   .ca-ck{margin-right:.5em;color:var(--accent-green,#059669)}
   .ca-k>span:first-child{font-weight:600}
-  .ca-sub{color:var(--text-muted,#64748b);font-size:14px}
+  .ca-sub{color:var(--text-muted,#64748b);font-size:15px}
   .ca-sub:not(:empty){margin-left:.6em}
-  .ca-bub{width:fit-content;max-width:92%;margin:0 0 6px auto;padding:8px 14px;white-space:pre-wrap;background:var(--primary-light,#eff6ff);border:1px solid #dbeafe;border-radius:12px 12px 4px 12px}
+  .ca-bub{width:fit-content;max-width:92%;margin:0 0 6px auto;padding:10px 16px;white-space:pre-wrap;background:var(--primary-light,#eff6ff);border:1px solid #dbeafe;border-radius:12px 12px 4px 12px}
   .ca-in{animation:caIn .4s ease both}
   @keyframes caIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
   .ca-cur{color:var(--primary,#2563eb);margin-left:1px}
   .ca-cur.idle{animation:caBlink 1.2s steps(1) infinite}
   @keyframes caBlink{50%{opacity:0}}
-  .ca-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:8px 18px 16px;font-size:12px;color:var(--text-muted,#64748b)}
+  .ca-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:10px 28px 22px;font-size:12px;color:var(--text-muted,#64748b)}
   .ca-act{display:flex;gap:6px}
   .ca-act a,.ca-act button{padding:4px 12px;border:1px solid var(--border-color,#e2e8f0);border-radius:999px;background:#fff;color:var(--text-main,#0f172a);font-size:12px;text-decoration:none;cursor:pointer;transition:border-color .2s,color .2s}
   .ca-act a:hover,.ca-act button:hover{border-color:var(--primary,#2563eb);color:var(--primary,#2563eb)}
-  @media (min-width:1680px){
-    .ca{position:fixed;left:max(24px,calc((100vw - 900px)/2 - 372px));top:110px;width:348px;margin:0;z-index:5}
+  @media (min-width:1760px){
+    .ca{position:fixed;left:max(24px,calc((100vw - 900px)/2 - 420px));top:100px;width:396px;margin:0;z-index:5}
+  }
+  @media (max-width:600px){
+    .ca{font-size:15px}
+    .ca-bar{padding:14px 18px}
+    .ca-stage{padding:22px 20px 10px;min-height:300px}
+    .ca-foot{padding:8px 18px 18px}
   }
   @media (prefers-reduced-motion:reduce){
     .ca *{animation:none!important;transition:none!important}
@@ -985,7 +990,6 @@
 
   async function scene(i, my, instant) {
     var fast = RM || instant;
-    for (var g = 0; g < ghost.children.length; g++) ghost.children[g].classList.toggle('on', g === i);
     live.className = instant && !RM ? 'ca-live pop' : 'ca-live';
     live.textContent = '';
     var sc = S[i];
@@ -1017,7 +1021,7 @@
       cur.className = 'ca-cur idle';
       if (!await wait(110, my)) return false;
     }
-    if (!await wait(RM ? 7000 : (instant ? 6000 : 3500), my)) return false;
+    if (!await wait(RM ? 7000 : 3500, my)) return false;
     live.classList.add('out');
     return await wait(RM ? 0 : 400, my);
   }
@@ -1045,12 +1049,12 @@
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.setAttribute('aria-label', '第 ' + (i + 1) + ' 条提示');
-    btn.onclick = function () { loop(i, true); };
+    btn.onclick = function () { loop(i); };
     nav.appendChild(btn);
   });
 
   // 桌面宽屏：固定在左侧空白区；其他：放在主内容最下方
-  var mq = matchMedia('(min-width:1680px)');
+  var mq = matchMedia('(min-width:1760px)');
   function place() { (mq.matches ? document.body : document.querySelector('main')).appendChild(root); }
   place();
   mq.addEventListener('change', place);
@@ -1065,8 +1069,8 @@
     try { window.$crisp.push(['do', 'chat:open']); } catch (e) {}
   };
 
-  document.getElementById('caPrev').onclick = function () { loop((curI - 1 + S.length) % S.length, true); };
-  document.getElementById('caNext').onclick = function () { loop((curI + 1) % S.length, true); };
+  document.getElementById('caPrev').onclick = function () { loop((curI - 1 + S.length) % S.length); };
+  document.getElementById('caNext').onclick = function () { loop((curI + 1) % S.length); };
 
   // 按北京时间显示是否在服务时间内（9:00–23:00）
   var dotEl = document.getElementById('caDot'), stEl = document.getElementById('caState');

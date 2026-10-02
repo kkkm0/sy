@@ -852,10 +852,11 @@
 
   <!-- 客服与帮助：打字机助手模块（整段粘贴到 Crisp 配置注释之前） -->
 <style>
-  .ca{background:var(--bg-card,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:14px;box-shadow:var(--shadow-sm,0 1px 3px rgba(0,0,0,.05));overflow:hidden;font-size:15px;line-height:1.85;margin:8px 0 96px;color:var(--text-main,#0f172a)}
+  .ca{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",Roboto,sans-serif;letter-spacing:.02em;background:var(--bg-card,#fff);border:1px solid var(--border-color,#e2e8f0);border-radius:14px;box-shadow:var(--shadow-sm,0 1px 3px rgba(0,0,0,.05));overflow:hidden;font-size:15px;line-height:1.85;margin:8px 0 96px;color:var(--text-main,#0f172a)}
   .ca button,.ca a{font:inherit}
-  .ca-bar{display:flex;align-items:center;gap:8px;padding:13px 22px;border-bottom:1px solid var(--border-color,#e2e8f0);background:#f8fafc;font-size:14px;font-weight:600}
+  .ca-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;row-gap:2px;padding:13px 22px;border-bottom:1px solid var(--border-color,#e2e8f0);background:#f8fafc;font-size:14px;font-weight:600}
   .ca-dot{width:8px;height:8px;border-radius:50%;background:var(--accent-green,#059669);box-shadow:0 0 0 3px rgba(5,150,105,.14)}
+  .ca-hours{flex:1 1 230px;min-width:0;margin-left:4px;font-size:12px;font-weight:400;line-height:1.5;color:var(--text-muted,#64748b)}
   .ca-state{font-size:13px;font-weight:500;color:var(--text-muted,#64748b)}
   .ca-nav{display:flex}
   .ca-ctl{display:flex;align-items:center;gap:4px}
@@ -871,8 +872,9 @@
   .ca-nav button:focus-visible{outline:2px solid var(--primary,#2563eb);outline-offset:1px;border-radius:4px}
   .ca-stage{position:relative;display:grid;padding:24px 26px 12px}
   .ca-live,.ca-ghost{grid-area:1/1}
-  .ca-ghost{display:grid;visibility:hidden;pointer-events:none}
-  .ca-ghost>div{grid-area:1/1}
+  .ca-ghost{visibility:hidden;pointer-events:none}
+  .ca-ghost>div{display:none}
+  .ca-ghost>div.on{display:block}
   .ca-live{transition:opacity .35s ease,transform .35s ease}
   .ca-live.out{opacity:0;transform:translateY(-4px)}
   .ca-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
@@ -880,7 +882,9 @@
   .ca-h{font-size:17px;font-weight:700}
   .ca-m{font-weight:600;color:var(--primary,#2563eb)}
   .ca-g,.ca-c{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;color:var(--text-muted,#64748b)}
-  .ca-c{margin-bottom:2px}
+  .ca-c{display:inline-block;margin:0 16px 4px 0}
+  .ca-l.ca-g{margin:10px 0 4px}
+  .ca-live.pop{animation:caIn .3s ease}
   .ca-ck{margin-right:.5em;color:var(--accent-green,#059669)}
   .ca-k>span:first-child{font-weight:600}
   .ca-sub{color:var(--text-muted,#64748b);font-size:14px}
@@ -906,6 +910,7 @@
 <aside class="ca" id="csAssist" aria-label="客服与帮助">
   <div class="ca-bar">
     <span class="ca-dot" id="caDot"></span>客服助手<span class="ca-state" id="caState">在线</span>
+    <span class="ca-hours">🕘 在线时间：9:00–23:00，欢迎咨询。其余时间请等待</span>
   </div>
   <div class="ca-stage">
     <div class="ca-live" id="caLive" aria-hidden="true"></div>
@@ -929,13 +934,11 @@
 (function () {
   // 块类型：t=打字文本(第3项: h标题/m强调/g日志)  k=标签+示例  c=✓日志项  b=聊天气泡
   var S = [
-    [['t','🕘 在线时间：9:00–23:00，欢迎咨询。','h'],['t','其余时间您可以先访问网站中的使用文档，\n查看常见问题和操作指南。']],
     [['t','💬 需要帮助？','h'],['t','点击右下角客服图标即可联系客服。'],['t','有问题请直接描述即可，\n无需发送「你好」「在吗」等寒暄消息。'],['t','提供的信息越完整，\n我们解决问题的速度就越快。','m']],
-    [['t','📚 遇到使用问题？','h'],['t','客户端安装、配置、使用等常见问题，\n使用文档中都有详细教程。'],['t','建议先查阅文档，\n通常可以更快解决问题。','m']],
     [['t','🔄 如果遇到无法使用的问题，','h'],['t','建议先删除当前订阅，\n然后前往官网重新导入订阅。'],['t','这个操作可以解决大量常见问题。'],['t','如果重新导入后仍然无法使用，\n再联系客服反馈问题。']],
-    [['t','🛠️ 仍然无法解决？','h'],['t','请直接发送你的问题，\n并尽量一次性提供以下信息：'],['k','📍 所在城市','例如：东京、上海、广州'],['k','📱 使用设备','例如：iPhone、Android、Windows、Mac'],['k','🌐 网络类型','例如：5G 流量、家庭 Wi-Fi、公司网络'],['k','🧩 代理软件','例如：Shadowrocket、Clash 等']],
+    [['t','📚 遇到使用问题？','h'],['t','客户端安装、配置、使用等常见问题，\n使用文档中都有详细教程。'],['t','建议先查阅文档，\n通常可以更快解决问题。','m']],
+    [['t','🛠️ 仍然无法解决？','h'],['t','请直接发送你的问题，\n并尽量一次性提供以下信息：'],['k','📍 所在城市','例如：东京、上海、广州'],['k','📱 使用设备','例如：iPhone、Android、Windows、Mac'],['k','🌐 网络类型','例如：5G 流量、家庭 Wi-Fi、公司网络'],['k','🧩 代理软件','例如：Shadowrocket、Clash 等'],['t','正在收集问题信息...','g'],['c','所在城市'],['c','使用设备'],['c','网络类型'],['c','代理软件'],['c','问题截图'],['t','信息越完整，处理越快。','m']],
     [['t','📸 请提供相关截图。','h'],['t','截图请尽量完整，\n并标明具体出现问题的位置。'],['t','如果有多个问题，\n请分别提供每个问题对应的截图，\n方便我们快速定位。'],['t','不要只发送一张无法看出问题所在的局部截图。','m']],
-    [['t','正在收集问题信息...','g'],['c','所在城市'],['c','使用设备'],['c','网络类型'],['c','代理软件'],['c','问题截图'],['t','信息越完整，处理越快。','m']],
     [['t','❌ 无效提问示例','h'],['b','你好','x'],['b','在吗','x'],['b','无法使用','x'],['t','🚫 信息太少，我们无法判断问题。','x']],
     [['t','📋 有效提问示例','h'],['b','我目前人在广州，\n使用 iPhone，\n5G 流量，\n使用 Shadowrocket。'],['b','删除订阅并重新导入后，\n节点仍然无法连接。'],['b','附上相关错误截图。'],['t','✅ 这样的问题，我们可以更快定位。','m']],
     [['t','⏳ 客服暂时没有回复？','h'],['t','请稍等片刻。'],['t','如果在线客服长时间没有回复，\n可以前往官网提交工单，\n我们会继续处理。'],['t','提交工单时也请直接描述问题，\n无需发送「你好」「在吗」等寒暄消息。']]
@@ -974,26 +977,28 @@
       (function tick() {
         if (tok !== my) return res(false);
         if (t >= ms) return res(true);
-        if (!paused && !document.hidden) t += 25;
-        setTimeout(tick, 25);
+        if (!paused && !document.hidden) t += 10;
+        setTimeout(tick, 10);
       })();
     });
   }
 
-  async function scene(i, my) {
-    live.className = 'ca-live';
+  async function scene(i, my, instant) {
+    var fast = RM || instant;
+    for (var g = 0; g < ghost.children.length; g++) ghost.children[g].classList.toggle('on', g === i);
+    live.className = instant && !RM ? 'ca-live pop' : 'ca-live';
     live.textContent = '';
     var sc = S[i];
     for (var j = 0; j < sc.length; j++) {
-      var b = sc[j], ty = b[0], o = mk(b, RM);
+      var b = sc[j], ty = b[0], o = mk(b, fast);
       live.appendChild(o.e);
       o.e.appendChild(cur);
-      cur.className = RM ? 'ca-cur' : 'ca-cur idle';
-      if (RM) continue;
+      cur.className = fast ? 'ca-cur idle' : 'ca-cur idle';
+      if (fast) continue;
       if (ty === 'c' || ty === 'b') {
         o.a.textContent = b[1];
         o.e.classList.add('ca-in');
-        if (!await wait(ty === 'c' ? 420 : 800, my)) return false;
+        if (!await wait(ty === 'c' ? 180 : 360, my)) return false;
         continue;
       }
       cur.className = 'ca-cur';
@@ -1003,27 +1008,28 @@
         for (var c = 0; c < ch.length; c++) {
           segs[q][0].textContent += ch[c];
           if (ch[c] === '\uFE0F') continue;
-          var d = 48;
-          if ('，、：'.indexOf(ch[c]) > -1) d += 160;
-          else if ('。？！\n'.indexOf(ch[c]) > -1) d += 260;
+          var d = 18;
+          if ('，、：'.indexOf(ch[c]) > -1) d += 70;
+          else if ('。？！\n'.indexOf(ch[c]) > -1) d += 120;
           if (!await wait(d, my)) return false;
         }
       }
       cur.className = 'ca-cur idle';
-      if (!await wait(280, my)) return false;
+      if (!await wait(110, my)) return false;
     }
-    if (!await wait(RM ? 7000 : 3800, my)) return false;
+    if (!await wait(RM ? 7000 : (instant ? 6000 : 3500), my)) return false;
     live.classList.add('out');
     return await wait(RM ? 0 : 400, my);
   }
 
-  async function loop(i) {
+  async function loop(i, instant) {
     var my = ++tok;
     while (tok === my) {
       curI = i;
       var dots = nav.children;
       for (var k = 0; k < dots.length; k++) dots[k].setAttribute('aria-current', k === i ? 'true' : 'false');
-      if (!await scene(i, my)) return;
+      if (!await scene(i, my, instant)) return;
+      instant = false;
       i = (i + 1) % S.length;
     }
   }
@@ -1039,7 +1045,7 @@
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.setAttribute('aria-label', '第 ' + (i + 1) + ' 条提示');
-    btn.onclick = function () { loop(i); };
+    btn.onclick = function () { loop(i, true); };
     nav.appendChild(btn);
   });
 
@@ -1059,8 +1065,8 @@
     try { window.$crisp.push(['do', 'chat:open']); } catch (e) {}
   };
 
-  document.getElementById('caPrev').onclick = function () { loop((curI - 1 + S.length) % S.length); };
-  document.getElementById('caNext').onclick = function () { loop((curI + 1) % S.length); };
+  document.getElementById('caPrev').onclick = function () { loop((curI - 1 + S.length) % S.length, true); };
+  document.getElementById('caNext').onclick = function () { loop((curI + 1) % S.length, true); };
 
   // 按北京时间显示是否在服务时间内（9:00–23:00）
   var dotEl = document.getElementById('caDot'), stEl = document.getElementById('caState');

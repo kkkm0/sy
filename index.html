@@ -942,8 +942,7 @@
     [['t','💬 需要帮助？','h'],['t','点击右下角客服图标即可联系客服。'],['t','有问题请直接描述即可，\n无需发送「你好」「在吗」等寒暄消息。'],['t','提供的信息越完整，\n我们解决问题的速度就越快。','m']],
     [['t','🔄 如果遇到无法使用的问题，','h'],['t','建议先删除当前订阅，\n然后前往官网重新导入订阅。'],['t','这个操作可以解决大量常见问题。'],['t','如果重新导入后仍然无法使用，\n再联系客服反馈问题。']],
     [['t','📚 遇到使用问题？','h'],['t','客户端安装、配置、使用等常见问题，\n使用文档中都有详细教程。'],['t','建议先查阅文档，\n通常可以更快解决问题。','m']],
-    [['t','🛠️ 仍然无法解决？','h'],['t','请直接发送你的问题，\n并尽量一次性提供以下信息：'],['k','📍 所在城市','例如：东京、上海、广州'],['k','📱 使用设备','例如：iPhone、Android、Windows、Mac'],['k','🌐 网络类型','例如：5G 流量、家庭 Wi-Fi、公司网络'],['k','🧩 代理软件','例如：Shadowrocket、Clash 等'],['t','正在收集问题信息...','g'],['c','所在城市'],['c','使用设备'],['c','网络类型'],['c','代理软件'],['c','问题截图'],['t','信息越完整，处理越快。','m']],
-    [['t','📸 请提供相关截图。','h'],['t','截图请尽量完整，\n并标明具体出现问题的位置。'],['t','如果有多个问题，\n请分别提供每个问题对应的截图，\n方便我们快速定位。'],['t','不要只发送一张无法看出问题所在的局部截图。','m']],
+    [['t','🛠️ 仍然无法解决？','h'],['t','请直接发送你的问题，\n并尽量一次性提供以下信息：'],['k','📍 所在城市','例如：东京、上海、广州'],['k','📱 使用设备','例如：iPhone、Android、Windows、Mac'],['k','🌐 网络类型','例如：5G 流量、家庭 Wi-Fi、公司网络'],['k','🧩 代理软件','例如：Shadowrocket、Clash 等'],['k','📸 相关截图','请尽量完整，并标明出现问题的位置'],['t','有多个问题请分别提供对应的截图，\n不要只发一张看不出问题所在的局部截图。'],['t','正在收集问题信息...','g'],['c','所在城市'],['c','使用设备'],['c','网络类型'],['c','代理软件'],['c','问题截图'],['t','信息越完整，处理越快。','m']],
     [['t','❌ 无效提问示例','h'],['b','你好','x'],['b','在吗','x'],['b','无法使用','x'],['t','🚫 信息太少，我们无法判断问题。','x']],
     [['t','📋 有效提问示例','h'],['b','我目前人在广州，\n使用 iPhone，\n5G 流量，\n使用 Shadowrocket。'],['b','删除订阅并重新导入后，\n节点仍然无法连接。'],['b','附上相关错误截图。'],['t','✅ 这样的问题，我们可以更快定位。','m']],
     [['t','⏳ 客服暂时没有回复？','h'],['t','请稍等片刻。'],['t','如果在线客服长时间没有回复，\n可以前往官网提交工单，\n我们会继续处理。'],['t','提交工单时也请直接描述问题，\n无需发送「你好」「在吗」等寒暄消息。']]
@@ -955,7 +954,7 @@
       sr = document.getElementById('caSr'),
       nav = document.getElementById('caNav'),
       RM = matchMedia('(prefers-reduced-motion: reduce)').matches,
-      tok = 0, paused = false, curI = 0,
+      tok = 0, curI = 0,
       cur = document.createElement('span');
   cur.textContent = '▌';
 
@@ -982,15 +981,15 @@
       (function tick() {
         if (tok !== my) return res(false);
         if (t >= ms) return res(true);
-        if (!paused && !document.hidden) t += 10;
+        if (!document.hidden) t += 10;
         setTimeout(tick, 10);
       })();
     });
   }
 
-  async function scene(i, my, instant) {
-    var fast = RM || instant;
-    live.className = instant && !RM ? 'ca-live pop' : 'ca-live';
+  async function scene(i, my, manual) {
+    var fast = RM;
+    live.className = 'ca-live';
     live.textContent = '';
     var sc = S[i];
     for (var j = 0; j < sc.length; j++) {
@@ -1021,19 +1020,19 @@
       cur.className = 'ca-cur idle';
       if (!await wait(110, my)) return false;
     }
-    if (!await wait(RM ? 7000 : 3500, my)) return false;
+    if (!await wait(RM ? 7000 : (manual ? 3000 : 2000), my)) return false;
     live.classList.add('out');
     return await wait(RM ? 0 : 400, my);
   }
 
-  async function loop(i, instant) {
+  async function loop(i, manual) {
     var my = ++tok;
     while (tok === my) {
       curI = i;
       var dots = nav.children;
       for (var k = 0; k < dots.length; k++) dots[k].setAttribute('aria-current', k === i ? 'true' : 'false');
-      if (!await scene(i, my, instant)) return;
-      instant = false;
+      if (!await scene(i, my, manual)) return;
+      manual = false;
       i = (i + 1) % S.length;
     }
   }
@@ -1049,7 +1048,7 @@
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.setAttribute('aria-label', '第 ' + (i + 1) + ' 条提示');
-    btn.onclick = function () { loop(i); };
+    btn.onclick = function () { loop(i, true); };
     nav.appendChild(btn);
   });
 
@@ -1059,18 +1058,14 @@
   place();
   mq.addEventListener('change', place);
 
-  root.addEventListener('mouseenter', function () { paused = true; });
-  root.addEventListener('mouseleave', function () { paused = false; });
-  root.addEventListener('focusin', function () { paused = true; });
-  root.addEventListener('focusout', function () { paused = false; });
 
   // 仅在用户点击时打开 Crisp，不会自动弹出
   document.getElementById('caOpen').onclick = function () {
     try { window.$crisp.push(['do', 'chat:open']); } catch (e) {}
   };
 
-  document.getElementById('caPrev').onclick = function () { loop((curI - 1 + S.length) % S.length); };
-  document.getElementById('caNext').onclick = function () { loop((curI + 1) % S.length); };
+  document.getElementById('caPrev').onclick = function () { loop((curI - 1 + S.length) % S.length, true); };
+  document.getElementById('caNext').onclick = function () { loop((curI + 1) % S.length, true); };
 
   // 按北京时间显示是否在服务时间内（9:00–23:00）
   var dotEl = document.getElementById('caDot'), stEl = document.getElementById('caState');
